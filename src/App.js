@@ -3,7 +3,7 @@ import { useState,useEffect } from 'react'
 import {projectFirestore} from "./firebase/config"
 import { FaTrashAlt } from 'react-icons/fa';
 import { FaRegThumbsUp } from 'react-icons/fa';
-import Model from "react-modal"
+import Modal from "react-modal"
 import { GiHourglass } from "react-icons/gi";
 const App = () => {
 
@@ -45,6 +45,8 @@ const App = () => {
         finished:finished
       }
 
+      setShow(false)
+
       try{
         projectFirestore.collection("todo").add(oneTask)
       }catch(error){
@@ -79,48 +81,99 @@ const App = () => {
     }
   };
   //end ot of the hard part
-  return <section onSubmit={submit}>
-    <button onClick={()=>setShow(true)}>Create task</button>
-    <Model onRequestClose={()=>setShow(false)} isOpen={show} style={{overlay:{
-      background:"grey"
-    },
-    content:{
-      width:"500px",
-      height:"500px"
-    }
-    }}>
-    <form className=''>
-      <input type="text" onChange={(e)=>setTask(e.target.value)} className='' /><br></br>
-      <input type='date' onChange={(e)=>setFinished(e.target.value)}/>
-      <input type="submit" onClick={()=>setShow(false)} className='' value="Create task" />
-    </form>
-    </Model>
-    <form onSubmit={submit}>
-    {error && <p className=''>{error}</p>}
-    {allTasks.map((oneTask)=>{
-      const {id,task,finished}=oneTask
+  return (
+    <section className="  flex flex-col items-center mt-10 min-h-screen">
+      <div className='bg-blue-500 w-1/4 h-24 rounded-2xl flex items-center justify-center text-white'>
+        <h1 className="text-5xl font-bold mb-4">Todo</h1>
+      </div>
+      <h3 className="flex justify-between w-full mb-2">
+      </h3>
+      <button
+        onClick={() => setShow(true)}
+        className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+      >
+        Create Task
+      </button>
+      <Modal
+        onRequestClose={() => setShow(false)}
+        isOpen={show}
+        style={{
+          overlay: {
+            height:"100vh",
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
 
-      return <div style={style(id)}  key={id} className=''>
-          <p  className=''>{task}</p>
-          <p className=''>{finished}</p>
-          {oneTask.status ? (
-                  <button className='completeButton' onClick={()=>toggleInProgress(id)}>
-                  <FaRegThumbsUp className='complete' />
+          },
+          content: {
+            width: "600px",
+            height: "600px",
+          },
+        }}
+      >
+        <form onSubmit={submit} className="flex flex-col">
+          <input
+            type="text"
+            onChange={(e) => setTask(e.target.value)}
+            className="py-2 px-4 mb-4 border border-gray-300 rounded"
+            placeholder="Enter task"
+          />
+          <input
+            type="date"
+            onChange={(e) => setFinished(e.target.value)}
+            className="py-2 px-4 mb-4 border border-gray-300 rounded"
+          />
+          <input
+            type="submit"
+            className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+            value="Create Taskss"
+          />
+        </form>
+      </Modal>
+      <div  className="mt-4 bg-white w-96 h-40">
+        {error && <p className="text-red-500">{error}</p>}
+        {allTasks.map((oneTask) => {
+          const { id, task, finished } = oneTask;
+  
+          return (
+            <div
+              style={style(id)}
+              key={id}
+              className="flex items-center justify-between w-full py-2 px-4 mb-4 border border-gray-300 rounded"
+            >
+              <div>
+                <p>{task}</p>
+                <p>{finished}</p>
+              </div>
+              {oneTask.status ? (
+                <button
+                  className="flex  items-center justify-center py-1 px-2 bg-green-500 text-white rounded hover:bg-green-600"
+                  onClick={() => toggleInProgress(id)}
+                >
+                  <FaRegThumbsUp className="mr-1 " />
                   Finished
                 </button>
-                  
-                ) : (
-                  <button className='inProgressButton' onClick={()=>toggleInProgress(id)}>
-                    <GiHourglass className='inProgress' /><br />
-                    In process
-                  </button>
-                )}
-          <button onClick={()=>deletos(id)}><FaTrashAlt/></button>
+              ) : (
+                <button
+                  className="flex fixed ml-3 items-center justify-center py-1 px-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                  onClick={() => toggleInProgress(id)}
+                >
+                  <GiHourglass className="mr-1 " />
+                  In Progress
+                </button>
+              )}
+              <button
+                onClick={() => deletos(id)}
+                className="flex items-center  justify-center py-1 px-2 bg-red-500 text-white rounded hover:bg-red-600"
+              >
+                <FaTrashAlt className='' />
+              </button> 
+            </div>
+          );
+        })}
       </div>
-    })}
-    </form>
-    
-  </section>
-}
-
-export default App
+    </section>
+  );
+      }
+    export default App
