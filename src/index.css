@@ -2,3 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
+#Easy{
+  color: rgb(3, 185, 3);
+}
+#Hard{
+  color: red;
+}
+#deleteButton{
+  position: fixed;
+  margin-left: 305px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+}
+#complete:hover{
+    transform:perspective(700px);
+  }
+  
+    #completeButton:hover{
+      transform: scale(1.1);
+        /* Start the shake animation and make the animation last for 0.5 seconds */
+    }
+    
+    #deleteButton:hover {
+      transform: scale(1.1);
+    }
+  #completeButton{
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: fixed;
+      margin-left: 180px;
+  }
+  #inProgressButton{
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: fixed;
+      margin-left: 180px;
+  }
+  #inProgress:hover {
+    transform: rotate(180deg);
+    transition: transform 0.4s ease-in-out;
+  }
+  #deletes:hover{
+    animation: shake 0.5s;
+      
+    /* When the animation is finished, start again */
+    animation-iteration-count: calc(0.3s);
+  
+  }
+  @keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+  
+    
+  }
+  
+  #inProgressButton:hover{
+    transform: scale(1.1);
+  }
