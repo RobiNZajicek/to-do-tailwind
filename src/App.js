@@ -5,15 +5,18 @@ import { FaTrashAlt } from 'react-icons/fa';
 import { FaRegThumbsUp } from 'react-icons/fa';
 import Modal from "react-modal"
 import { GiHourglass } from "react-icons/gi";
+import RealTimeDate from './RealTimeDate';
 const App = () => {
 
-    const[task,setTask]=useState("")
-    const[allTasks,setAllTasks]=useState([])
-    const[error,setError]=useState("")
+    const [task,setTask]=useState("")
+    const [allTasks,setAllTasks]=useState([])
+    const [error,setError]=useState("")
     const [finished,setFinished]=useState("")
-    const[bgColor,setBgcolor]=useState("white")
-    const[show,setShow]=useState(false)
-    const [difficulty, setDifficulty] = useState('');
+    const [bgColor,setBgcolor]=useState("white")
+    const [show,setShow]=useState(false)
+    const [difficulty, setDifficulty] = useState("");
+    const [FilerButton,setFilterButton]=useState("")
+    const [buttonText,setButtonText]=useState("Filter Easy Tasks")
 
     useEffect(()=>{
       const sub=projectFirestore.collection("todo").onSnapshot((snap)=>{
@@ -38,13 +41,13 @@ const App = () => {
 
     const submit=(e)=>{
       e.preventDefault()
-      
+       console.log(difficulty);
      if(!task.trim()){
       setError("fill task")
      }else if(!finished.trim()){
-      setError("fill")
+      setError("fill date when you want to finis task")
      }else if(difficulty.trim()===""){
-      setError("FIll difficult")
+      setError("Fill difficult")
       return;
      
      
@@ -106,32 +109,65 @@ const App = () => {
   const handleDifficultyChange = (event) => {
     setDifficulty(event.target.value);
   };
+  
+
+  const filerDificulty=()=>{
+    if(FilerButton===""){
+      setButtonText("Fillter Hard Tasks")
+      setFilterButton("Easy")
+    }else if(FilerButton==="Easy"){
+      setButtonText("Fillter All Tasks")
+      setFilterButton("Hard")
+    }else{
+      setFilterButton("")
+      setButtonText("Fillter Easy Tasks")
+    }
+  }
+
 
   return (
     <section className="  flex flex-col items-center mt-10 ">
-      <div className='bg-blue-500 w-1/4 h-24 rounded-2xl flex items-center justify-center text-white'>
-        <h1 className="text-5xl font-bold mb-4">Todo</h1>
+      <div className='bg-blue-500 w-1/4 h-16 rounded-2xl flex items-center justify-center text-white'>
+        <h1 className="text-5xl font-bold mb-2">Todo</h1>
       </div>
       <h3 className="flex justify-between w-full mb-2">
       </h3>
+      
+      
       <button
         onClick={() => setShow(true)}
-        className="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+        className="py-2 px-4  bg-blue-500 text-white rounded hover:bg-blue-600"
       >
         Create Task
       </button>
+      <button  onClick={filerDificulty} className="py-2 mt-2 px-4  bg-blue-500 text-white rounded hover:bg-blue-600">
+        {buttonText}
+      </button>
+
       <Modal
         onRequestClose={() => setShow(false)}
         isOpen={show}
         style={{
           overlay: {
+            position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    opacity: 1,
             backgroundColor: "rgba(0, 0, 0, 0.3)",
             backdropFilter:"blur(6px)",
             msFilter:"blue(6px)",
           },
           content: {
+            position: 'absolute',
             width: "300px",
-            height: "450px",
+            height: "280px",
+            top: '200px',
+                    left: '780px',
+                    right: '500px',
+                    bottom: '200px',
+                    border: '1px solid #ccc',
           },
         }}
       >
@@ -168,22 +204,30 @@ const App = () => {
           />    
         </form>
         
-        <img className='flex w-44 h-40 ml-8 mt-4 justify-center items-center' src="https://m.media-amazon.com/images/I/41u3nDmbK8L._AC_.jpg" alt="" />
+        {/* <img className='flex w-44 h-60 ml-32 mt-6 justify-center items-center' src="https://m.media-amazon.com/images/I/41u3nDmbK8L._AC_.jpg" alt="" /> */}
       </Modal>
-      <div  className="mt-4 bg-white w-96 h-40">
-        {allTasks.map((oneTask) => {
-          const { id, task, finished } = oneTask;
+      <div  className="mt-4 w-96 h-40">
+        {allTasks.filter((oneTask) => {
+    if (FilerButton === "") {
+      return true;
+    } else {
+      return oneTask.difficulty === FilerButton;
+    }
+  })
+  .map((oneTask) => {
+          const { id, task, finished,difficulty} = oneTask;
   
           return (
             <div
               style={style(id)}
               key={id}
-              className="flex items-center justify-between w-full py-2 px-4 mb-4 border border-gray-300 rounded"
+              className="flex items-center justify-between w-96 py-2 px-4 mb-4 border border-blue-500 rounded"
             >
-              <div>
+              <div className=''>
                 <p>{task}</p>
-                <p>{finished}</p>
-                <p >{oneTask.difficulty}</p> 
+                <p className='text-xs'><RealTimeDate/>{finished}</p>
+                <p style={{ color: oneTask.difficulty === "Easy" ? "rgb(0, 207, 0)" : "red" }}>{oneTask.difficulty}</p> 
+
               </div>
               {oneTask.status ? (
                 <button

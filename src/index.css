@@ -2,12 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-#Easy{
-  color: rgb(3, 185, 3);
-}
-#Hard{
-  color: red;
-}
 #deleteButton{
   position: fixed;
   margin-left: 305px;
