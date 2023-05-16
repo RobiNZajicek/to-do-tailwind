@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 #deleteButton{
-  position: fixed;
-  margin-left: 305px;
+  position: relative;
+  margin-left: 60px;
   cursor: pointer;
   transition: all 0.3s ease;
 
@@ -24,14 +24,14 @@
   #completeButton{
       cursor: pointer;
       transition: all 0.3s ease;
-      position: fixed;
-      margin-left: 180px;
+      position: absolute;
+
   }
   #inProgressButton{
       cursor: pointer;
       transition: all 0.3s ease;
-      position: fixed;
-      margin-left: 180px;
+      position: absolute;
+
   }
   #inProgress:hover {
     transform: rotate(180deg);

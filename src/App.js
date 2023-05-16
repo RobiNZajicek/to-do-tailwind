@@ -49,7 +49,7 @@ const App = () => {
      }else if(difficulty.trim()===""){
       setError("Fill difficult")
       return;
-     
+      
      
      }else{
       
@@ -57,7 +57,7 @@ const App = () => {
         
         task:task,
         finished:finished,
-        difficulty: difficulty
+        difficulty: difficulty,
       }
 
       setShow(false)
@@ -111,39 +111,37 @@ const App = () => {
   };
   
 
-  const filerDificulty=()=>{
+  const filerDificulty=(e)=>{
+    setFilterButton(e.target.value)
     if(FilerButton===""){
       setButtonText("Fillter Hard Tasks")
-      setFilterButton("Easy")
     }else if(FilerButton==="Easy"){
-      setButtonText("Fillter All Tasks")
-      setFilterButton("Hard")
-    }else{
-      setFilterButton("")
+      setButtonText(FilerButton)
+    }else if(FilerButton==="Hard"){
       setButtonText("Fillter Easy Tasks")
     }
   }
 
 
   return (
-    <section className="  flex flex-col items-center mt-10 ">
-      <div className='bg-blue-500 w-1/4 h-16 rounded-2xl flex items-center justify-center text-white'>
+    <section className="  flex flex-col items-center h-max mt-4  ">
+      <div className='bg-blue-500 w-2/6 h-16 rounded-xl  flex items-center justify-center text-white'>
         <h1 className="text-5xl font-bold mb-2">Todo</h1>
       </div>
-      <h3 className="flex justify-between w-full mb-2">
-      </h3>
-      
+
+      <div className='bg-blue-500 w-1/4 rounded-xl flex justify-center min-h-screen mt-6 '>
       
       <button
         onClick={() => setShow(true)}
-        className="py-2 px-4  bg-blue-500 text-white rounded hover:bg-blue-600"
+        className="py-2 px-4 absolute  bg-blue-400 mt-2 text-white rounded hover:bg-blue-600" 
       >
         Create Task
       </button>
-      <button  onClick={filerDificulty} className="py-2 mt-2 px-4  bg-blue-500 text-white rounded hover:bg-blue-600">
-        {buttonText}
-      </button>
-
+      <select value={FilerButton}   onChange={filerDificulty} className="py-2 mt-14 px-4 absolute    bg-blue-400 text-white rounded hover:bg-blue-600">
+        <option value="" >Fillter All</option>
+        <option value="Easy">Fillter Easy</option>
+        <option value="Hard">FIllter Hard</option>
+      </select>
       <Modal
         onRequestClose={() => setShow(false)}
         isOpen={show}
@@ -206,7 +204,8 @@ const App = () => {
         
         {/* <img className='flex w-44 h-60 ml-32 mt-6 justify-center items-center' src="https://m.media-amazon.com/images/I/41u3nDmbK8L._AC_.jpg" alt="" /> */}
       </Modal>
-      <div  className="mt-4 w-96 h-40">
+      
+      <div  className="mt-28 w-96 h-40 ">
         {allTasks.filter((oneTask) => {
     if (FilerButton === "") {
       return true;
@@ -221,7 +220,7 @@ const App = () => {
             <div
               style={style(id)}
               key={id}
-              className="flex items-center justify-between w-96 py-2 px-4 mb-4 border border-blue-500 rounded"
+              className="flex items-center justify-between bg-blue-500 w-96 py-2 px-4 mb-2  border-blue-500 rounded-xl"
             >
               <div className=''>
                 <p>{task}</p>
@@ -232,7 +231,7 @@ const App = () => {
               {oneTask.status ? (
                 <button
                 id='completeButton'
-                  className="flex ml-3 w-28 items-center justify-center py-1 px-2 bg-green-500 text-white rounded hover:bg-green-600"
+                  className="flex ml-44 h-8 w-28 items-center justify-center py-1 px-2 bg-green-500 text-white rounded hover:bg-green-600"
                   onClick={() => toggleInProgress(id)}
                 >
                   <FaRegThumbsUp id='complete' className="mr-1  w-4" />
@@ -241,17 +240,17 @@ const App = () => {
               ) : (
                 <button
                 id='inProgressButton'
-                  className="flex ml-3 items-center justify-center py-1 px-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+                  className=" ml-44 h-8  flex py-1 px-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
                   onClick={() => toggleInProgress(id)}
                 >
-                  <GiHourglass id='inProgress' className="mr-1 w-4 " />
+                  <GiHourglass id='inProgress' className="mr-1 mt-1 w-4 " />
                   In Progress
                 </button>
               )}
               <button
                 onClick={() => deletos(id)}
                 id='deleteButton'
-                className="flex items-center  justify-center py-1 px-2 bg-red-500 text-white rounded hover:bg-red-600"
+                className=" py-1 px-2 w-12 bg-red-500 text-white rounded hover:bg-red-600"
               >
                 <FaTrashAlt id='deletes' className='w-8 h-6' />
               </button> 
@@ -259,6 +258,8 @@ const App = () => {
           );
         })}
       </div>
+      </div>
+
     </section>
   );
       }
